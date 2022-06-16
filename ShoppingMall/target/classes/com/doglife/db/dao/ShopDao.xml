@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.doglife.db.dao.ShopDao">
+
+	<select id="selectNewProductList" parameterType="com.doglife.db.dto.ProductListDto" resultType="com.doglife.db.dto.ProductDto">
+		SELECT * FROM product ORDER BY pNum DESC LIMIT 4
+	</select>
+
+	<select id="selectBestProductList" parameterType="com.doglife.db.dto.ProductListDto" resultType="com.doglife.db.dto.ProductDto">
+		SELECT * FROM product WHERE pavg > 4.5
+	</select>
+		
+	<select id="selectProductList" parameterType="com.doglife.db.dto.ProductListDto" resultType="com.doglife.db.dto.ProductDto">
+		SELECT * FROM product
+		<if test="colname != null and colname !=''">
+			WHERE ${colname} LIKE concat('%',#{keyword},'%')
+		</if>
+		LIMIT #{pageNum}, #{listCnt}
+	</select>
+	
+	<select id="selectClothesList" parameterType="com.doglife.db.dto.ProductListDto" resultType="com.doglife.db.dto.ProductDto">
+		SELECT * FROM product WHERE pcategory = clothes
+		<if test="colname != null and colname !=''">
+			WHERE ${colname} LIKE concat('%',#{keyword},'%')
+		</if>
+		LIMIT #{pageNum}, #{listCnt}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="bcntSelect" parameterType="com.doglife.db.dto.ProductListDto" resultType="int">
+		SELECT count(*) FROM product
+		<if test="colname != null and colname !=''">
+			WHERE ${colname} LIKE concat('%',#{keyword},'%')
+		</if>
+	</select>
+
+	<select id="selectProductInfo" parameterType="Integer" resultType="com.doglife.db.dto.ProductDto">
+		SELECT * FROM product WHERE pnum=#{pnum}
+	</select>
+
+	<select id="selectProductFile" parameterType="Integer" resultType="com.doglife.db.dto.ProductFileDto">
+		SELECT * FROM productfile WHERE pnum=#{pnum}
+	</select>
+	
+	<select id="selectProductReply" parameterType="Integer" resultType="com.doglife.db.dto.ShopReviewDto">
+		SELECT * FROM shopreview WHERE pnum=#{pnum}
+	</select>
+	
+	<select id="selectCartList" parameterType="String" resultType="com.doglife.db.dto.CartDto">
+		SELECT cart.cartNum, cart.customerID, product.pnum, customer.customerName, product.pname, cart.quantity, product.pprice FROM customer, product, cart WHERE product.pnum = cart.pnum AND cart.customerID = #{customerID} ORDER BY cart.cartnum  
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>
